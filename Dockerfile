@@ -43,6 +43,19 @@ EXPOSE 50000
 
 ENV COPY_REFERENCE_FILE_LOG $JENKINS_HOME/copy_reference_file.log
 
+
+# Sparta-specific stuff
+RUN wget -qO- https://get.docker.com/ | sh
+RUN usermod -aG docker jenkins
+RUN apt-get install -y python-pip
+RUN apt-get install -y build-essential
+RUN pip install j2cli
+# end of Sparta-specific
+
+
+
+
+
 USER jenkins
 
 COPY jenkins.sh /usr/local/bin/jenkins.sh
@@ -50,3 +63,4 @@ ENTRYPOINT ["/bin/tini", "--", "/usr/local/bin/jenkins.sh"]
 
 # from a derived Dockerfile, can use `RUN plugin.sh active.txt` to setup /usr/share/jenkins/ref/plugins from a support bundle
 COPY plugins.sh /usr/local/bin/plugins.sh
+
